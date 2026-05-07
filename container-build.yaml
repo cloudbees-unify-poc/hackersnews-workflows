@@ -36,13 +36,13 @@ jobs:
       - name: Login to GitHub Container Registry
         uses: docker://docker:24-cli
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ cloudbees.scm.owner }} --password-stdin
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u cloudbees-unify-poc --password-stdin
 
       - uses: cloudbees-io/kaniko@v1
         name: Build container image
         kind: build
         with:
-          destination: ghcr.io/${{ cloudbees.scm.owner }}/${{ inputs.imageNamespace }}-${{ inputs.appName }}:${{ inputs.versionStart }}-${{ cloudbees.version }}
+          destination: ghcr.io/cloudbees-unify-poc/${{ inputs.imageNamespace }}-${{ inputs.appName }}:${{ inputs.versionStart }}-${{ cloudbees.version }}
           tar-path: container-image.tar
           build-args: BUILDKIT_CONTEXT_KEEP_GIT_DIR=1,BUILDKIT_INLINE_CACHE=1
           artifact-name: ${{ inputs.appName }}
@@ -53,7 +53,7 @@ jobs:
           content: |-
             ## Built and pushed image to GitHub Container Registry
 
-            [GHCR](https://ghcr.io/${{ cloudbees.scm.owner }}/${{ inputs.imageNamespace }}-${{ inputs.appName }})
+            [GHCR](https://ghcr.io/cloudbees-unify-poc/${{ inputs.imageNamespace }}-${{ inputs.appName }})
 
-            Published ghcr.io/${{ cloudbees.scm.owner }}/${{ inputs.imageNamespace }}-${{ inputs.appName }}:${{ inputs.versionStart }}-${{ cloudbees.version }}
+            Published ghcr.io/cloudbees-unify-poc/${{ inputs.imageNamespace }}-${{ inputs.appName }}:${{ inputs.versionStart }}-${{ cloudbees.version }}
           format: MARKDOWN
